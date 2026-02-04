@@ -11,10 +11,6 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState('month');
 
-  useEffect(() => {
-    loadSummary();
-  }, [dateRange]);
-
   const getDateRange =  useCallback(() => {
     const endDate = new Date();
     let startDate;
@@ -52,6 +48,10 @@ function Dashboard() {
       setLoading(false);
     }
   }, [getDateRange]);
+
+  useEffect(() => {
+  loadSummary();
+}, [loadSummary]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {

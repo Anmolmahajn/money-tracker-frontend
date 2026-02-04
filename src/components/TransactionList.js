@@ -9,10 +9,6 @@ function TransactionList({ refresh, onEdit }) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  useEffect(() => {
-    loadTransactions();
-  }, [refresh, loadTransactions]);
-
   const loadTransactions = useCallback (async () => {
     setLoading(true);
     try {
@@ -29,6 +25,10 @@ function TransactionList({ refresh, onEdit }) {
       setLoading(false);
     }
   }, [startDate, endDate]);
+
+  useEffect(() => {
+  loadTransactions();
+}, [refresh, loadTransactions]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this transaction?')) {

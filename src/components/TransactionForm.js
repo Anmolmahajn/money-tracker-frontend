@@ -25,24 +25,6 @@ function TransactionForm({ onTransactionAdded, editingTransaction, onCancelEdit 
     isRecurring: false,
   });
 
-  useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
-
-  useEffect(() => {
-    if (editingTransaction) {
-      setFormData({
-        description: editingTransaction.description,
-        amount: editingTransaction.amount,
-        transactionDate: editingTransaction.transactionDate,
-        paymentMethod: editingTransaction.paymentMethod,
-        paymentDetails: editingTransaction.paymentDetails || '',
-        categoryId: editingTransaction.categoryId,
-        notes: editingTransaction.notes || '',
-        isRecurring: editingTransaction.isRecurring || false,
-      });
-    }
-  }, [editingTransaction]);
 
   const loadCategories = useCallback (async () => {
     try {
@@ -55,6 +37,21 @@ function TransactionForm({ onTransactionAdded, editingTransaction, onCancelEdit 
       console.error('Error loading categories:', error);
     }
   }, [formData.categoryId]);
+
+  useEffect(() => {
+  if (editingTransaction) {
+    setFormData({
+      description: editingTransaction.description,
+      amount: editingTransaction.amount,
+      transactionDate: editingTransaction.transactionDate,
+      paymentMethod: editingTransaction.paymentMethod,
+      paymentDetails: editingTransaction.paymentDetails || '',
+      categoryId: editingTransaction.categoryId,
+      notes: editingTransaction.notes || '',
+      isRecurring: editingTransaction.isRecurring || false,
+    });
+  }
+}, [editingTransaction]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
