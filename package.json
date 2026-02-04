@@ -2,6 +2,9 @@
   "name": "money-tracker-frontend",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "@stomp/stompjs": "^7.3.0",
     "axios": "^1.13.4",
@@ -38,3 +41,4 @@
     ]
   }
 }
+
