@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback  } from 'react';
 import { transactionAPI } from '../services/api';
 import { format } from 'date-fns';
 import { Edit2, Trash2, Calendar, CreditCard } from 'lucide-react';
@@ -11,9 +11,9 @@ function TransactionList({ refresh, onEdit }) {
 
   useEffect(() => {
     loadTransactions();
-  }, [refresh]);
+  }, [refresh, loadTransactions]);
 
-  const loadTransactions = async () => {
+  const loadTransactions = useCallback (async () => {
     setLoading(true);
     try {
       let response;
@@ -28,7 +28,7 @@ function TransactionList({ refresh, onEdit }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [startDate, endDate]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this transaction?')) {

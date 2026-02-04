@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { transactionAPI } from '../services/api';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Calendar, Wallet } from 'lucide-react';
@@ -15,7 +15,7 @@ function Dashboard() {
     loadSummary();
   }, [dateRange]);
 
-  const getDateRange = () => {
+  const getDateRange =  useCallback(() => {
     const endDate = new Date();
     let startDate;
 
@@ -38,9 +38,9 @@ function Dashboard() {
       startDate: format(startDate, 'yyyy-MM-dd'),
       endDate: format(endDate, 'yyyy-MM-dd'),
     };
-  };
+  }, [dateRange]);
 
-  const loadSummary = async () => {
+  const loadSummary = useCallback(async () => {
     setLoading(true);
     try {
       const { startDate, endDate } = getDateRange();
@@ -51,7 +51,7 @@ function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getDateRange]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {

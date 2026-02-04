@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { categoryAPI, transactionAPI } from '../services/api';
 import { Plus, X } from 'lucide-react';
 
@@ -27,7 +27,7 @@ function TransactionForm({ onTransactionAdded, editingTransaction, onCancelEdit 
 
   useEffect(() => {
     loadCategories();
-  }, []);
+  }, [loadCategories]);
 
   useEffect(() => {
     if (editingTransaction) {
@@ -44,7 +44,7 @@ function TransactionForm({ onTransactionAdded, editingTransaction, onCancelEdit 
     }
   }, [editingTransaction]);
 
-  const loadCategories = async () => {
+  const loadCategories = useCallback (async () => {
     try {
       const response = await categoryAPI.getAll();
       setCategories(response.data);
@@ -54,7 +54,7 @@ function TransactionForm({ onTransactionAdded, editingTransaction, onCancelEdit 
     } catch (error) {
       console.error('Error loading categories:', error);
     }
-  };
+  }, [formData.categoryId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
