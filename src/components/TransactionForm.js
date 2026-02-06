@@ -26,32 +26,40 @@ function TransactionForm({ onTransactionAdded, editingTransaction, onCancelEdit 
   });
 
 
-  const loadCategories = useCallback (async () => {
-    try {
-      const response = await categoryAPI.getAll();
-      setCategories(response.data);
-      if (response.data.length > 0 && !formData.categoryId) {
-        setFormData(prev => ({ ...prev, categoryId: response.data[0].id }));
-      }
-    } catch (error) {
-      console.error('Error loading categories:', error);
-    }
-  }, [formData.categoryId]);
-
   useEffect(() => {
-  if (editingTransaction) {
-    setFormData({
-      description: editingTransaction.description,
-      amount: editingTransaction.amount,
-      transactionDate: editingTransaction.transactionDate,
-      paymentMethod: editingTransaction.paymentMethod,
-      paymentDetails: editingTransaction.paymentDetails || '',
-      categoryId: editingTransaction.categoryId,
-      notes: editingTransaction.notes || '',
-      isRecurring: editingTransaction.isRecurring || false,
-    });
+    if (editingTransaction) {
+      setFormData({
+        description: editingTransaction.description,
+        amount: editingTransaction.amount,
+        transactionDate: editingTransaction.transactionDate,
+        paymentMethod: editingTransaction.paymentMethod,
+        paymentDetails: editingTransaction.paymentDetails || '',
+        categoryId: editingTransaction.categoryId,
+        notes: editingTransaction.notes || '',
+        isRecurring: editingTransaction.isRecurring || false,
+      });
+    }
+  }, [editingTransaction]);
+
+const loadCategories = async () => {
+  try {
+    const response = await categoryAPI.getAll();
+    setCategories(response.data);
+
+    if (response.data.length > 0) {
+      setFormData(prev => ({
+        ...prev,
+        categoryId: prev.categoryId || response.data[0].id
+      }));
+    }
+  } catch (error) {
+    console.error('Error loading categories:', error);
   }
-}, [editingTransaction]);
+};
+
+useEffect(() => {
+  loadCategories();
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
